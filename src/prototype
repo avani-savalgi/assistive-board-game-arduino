@@ -1,0 +1,63 @@
+const int buzzerPin = 9;
+
+// Button pins
+const int snakeHeadBtn = 2;
+const int snakeTailBtn = 3;
+const int ladderBaseBtn = 4;
+const int ladderTopBtn = 5;
+
+bool snakeTriggered = false;
+bool ladderTriggered = false;
+
+void setup() {
+pinMode(buzzerPin, OUTPUT);
+pinMode(snakeHeadBtn, INPUT_PULLUP);
+pinMode(snakeTailBtn, INPUT_PULLUP);
+pinMode(ladderBaseBtn, INPUT_PULLUP);
+pinMode(ladderTopBtn, INPUT_PULLUP);
+}
+
+void loop() {
+// Read buttons (LOW when pressed because of INPUT_PULLUP)
+bool snakeHeadPressed = digitalRead(snakeHeadBtn) == LOW;
+bool snakeTailPressed = digitalRead(snakeTailBtn) == LOW;
+bool ladderBasePressed = digitalRead(ladderBaseBtn) == LOW;
+bool ladderTopPressed = digitalRead(ladderTopBtn) == LOW;
+
+if (snakeHeadPressed) {
+snakeTriggered = true;
+beepLong();
+delay(100); // debounce
+}
+
+if (snakeTriggered && snakeTailPressed) {
+beepShort();
+snakeTriggered = false;
+delay(100);
+}
+
+if (ladderBasePressed) {
+ladderTriggered = true;
+beepLong();
+delay(500);
+}
+
+if (ladderTriggered && ladderTopPressed) {
+beepShort();
+ladderTriggered = false;
+delay(500);
+}
+}
+
+void beepLong() {
+digitalWrite(buzzerPin, HIGH);
+delay(1000);
+digitalWrite(buzzerPin, LOW);
+}
+
+void beepShort() {
+digitalWrite(buzzerPin, HIGH);
+delay(500);
+digitalWrite(buzzerPin, LOW);
+}
+
